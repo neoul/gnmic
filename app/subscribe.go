@@ -174,9 +174,8 @@ func (a *App) SubscribeRunPrompt(cmd *cobra.Command, args []string) error {
 	if a.Config.LocalFlags.SubscribeBackoff > 0 {
 		limiter = time.NewTicker(a.Config.LocalFlags.SubscribeBackoff)
 	}
-
-	a.wg.Add(len(a.collector.Targets))
 	for name := range a.Config.Targets {
+		a.wg.Add(1)
 		go a.subscribeStream(a.ctx, name)
 		if limiter != nil {
 			<-limiter.C

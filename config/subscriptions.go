@@ -30,10 +30,10 @@ func (c *Config) GetSubscriptions(cmd *cobra.Command) (map[string]*collector.Sub
 		}
 		sub.StreamMode = c.LocalFlags.SubscribeStreamMode
 		if flagIsSet(cmd, "heartbeat-interval") {
-			sub.HeartbeatInterval = &c.LocalFlags.SubscribeHeartbearInterval
+			sub.HeartbeatInterval = c.LocalFlags.SubscribeHeartbearInterval
 		}
 		if flagIsSet(cmd, "sample-interval") {
-			sub.SampleInterval = &c.LocalFlags.SubscribeSampleInterval
+			sub.SampleInterval = c.LocalFlags.SubscribeSampleInterval
 		}
 		sub.SuppressRedundant = c.LocalFlags.SubscribeSuppressRedundant
 		sub.UpdatesOnly = c.LocalFlags.SubscribeUpdatesOnly
@@ -102,15 +102,11 @@ func (c *Config) GetSubscriptions(cmd *cobra.Command) (map[string]*collector.Sub
 }
 
 func (c *Config) setSubscriptionDefaults(sub *collector.SubscriptionConfig, cmd *cobra.Command) {
-	if sub.SampleInterval == nil {
-		if flagIsSet(cmd, "sample-interval") {
-			sub.SampleInterval = &c.LocalFlags.SubscribeSampleInterval
-		}
+	if flagIsSet(cmd, "sample-interval") {
+		sub.SampleInterval = c.LocalFlags.SubscribeSampleInterval
 	}
-	if sub.HeartbeatInterval == nil {
-		if flagIsSet(cmd, "heartbeat-interval") {
-			sub.HeartbeatInterval = &c.LocalFlags.SubscribeHeartbearInterval
-		}
+	if flagIsSet(cmd, "heartbeat-interval") {
+		sub.HeartbeatInterval = c.LocalFlags.SubscribeHeartbearInterval
 	}
 	if sub.Encoding == "" {
 		sub.Encoding = c.Encoding
